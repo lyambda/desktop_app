@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>λямбда</title>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <link rel="icon" href="icon.ico">
+</head>
+<body>
+  <div class="login">
+    <div class="first" style="display: block;">
+      <h1>λямбда</h1>
+      <p>Инновационная социальная сеть с открытым исходным кодом и возможностью настройки под себя практически всего!</p>
+      <a class="btn" href="#" onclick="second()">-></a>
+    </div>
+    <div class="second" style="display: none;">
+      <h1>🟣 Введите почту:</h1>
+      <input type="email" placeholder="thelyambda@gmail.com">
+      <a class="btn" href="#" onclick="third()">-></a>
+    </div>
+    <div class="third" style="display: none;">
+      <h1>🟣 Введите код:</h1>
+      <input type="number" min="100000" max="999999" placeholder="000000">
+      <a class="btn" href="#" onclick="chat()">-></a>
+    </div>
+  </div>
+  <script type="text/javascript">
+    function second() {
+      document.querySelector('.second').style.display = 'block';
+      document.querySelector('.first').style.display = 'none';
+    }
+    function third() {
+      document.querySelector('.third').style.display = 'block';
+      document.querySelector('.second').style.display = 'none';
+    }
+    function chat() {
+      document.querySelector('.third').style.display = 'none';
+      document.querySelector('.second').style.display = 'none';
+      document.querySelector('.first').style.display = 'none';
+    }
+  </script>
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300&display=swap');
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #101420;
+  color: white;
+}
+
+div {
+  position: absolute;
+  width: 500px;
+  height: 250px;
+  top: 50%;
+  left: 50%;
+  font-weight: 200;
+  text-align: center;
+  margin-top: -125px;
+  margin-left: -250px;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 100;
+}
+
+.btn {
+  background-color: #8520af !important;
+  width: 20%;
+  text-decoration: none;
+  color: white;
+  border-color: #710c9b;
+  font-size: 18px;
+  letter-spacing: 0.025em;
+  line-height: 38px;
+  font-weight: 900;
+  height: 40px;
+  padding: 10px 20px;
+}
+
+input {
+  padding: 13.5px;
+  opacity: 0.4;
+  background: #8520af !important;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+  </style>
+</body>
+</html>
