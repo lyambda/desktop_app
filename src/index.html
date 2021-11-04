@@ -15,28 +15,113 @@
     </div>
     <div class="second" style="display: none;">
       <h1>🟣 Введите почту:</h1>
-      <input type="email" placeholder="thelyambda@gmail.com">
+      <input type="email" placeholder="thelyambda@gmail.com" id="email">
       <a class="btn" href="#" onclick="third()">-></a>
     </div>
     <div class="third" style="display: none;">
       <h1>🟣 Введите код:</h1>
-      <input type="number" min="100000" max="999999" placeholder="000000">
+      <input type="number" min="100000" max="999999" placeholder="000000" id="code">
       <a class="btn" href="#" onclick="chat()">-></a>
+    </div>
+    <div class="reg" style="display: none;">
+      <h1>🟣 Заполните поля:</h1>
+      <input type="text" placeholder="Всеволод" id="name">
+      <input type="text" placeholder="Остащенко" id="surname">
+      <input type="text" placeholder="Программист, 15 лет" id="description">
+      <a class="btn" href="#" onclick="reg()">-></a>
+    </div>
+  </div>
+  <div class="chat" style="display: none;">
+    <div class="menu">
+      <div class="block"><img src="https://avatars.githubusercontent.com/u/63463168?v=4"> User 1</div>
+      <div class="block"><img src="https://avatars.githubusercontent.com/u/63463168?v=4"> User 2</div>
+      <div class="block"><img src="https://avatars.githubusercontent.com/u/63463168?v=4"> User 3</div>
+      <div class="block"><img src="https://avatars.githubusercontent.com/u/63463168?v=4"> User 4</div>
+      <div class="block"><img src="https://avatars.githubusercontent.com/u/63463168?v=4"> User 5</div>
+      <div class="block"><img src="https://avatars.githubusercontent.com/u/63463168?v=4"> User 6</div>
+    </div>
+    <div class="dialog">
+      <div class="bubble you">Hi!</div>
+      <div class="bubble">Hi)</div>
+      <div class="bubble you">Hi!</div>
+      <div class="bubble">Hi)</div>
+      <input type="text" placeholder="Сообщение...">
     </div>
   </div>
   <script type="text/javascript">
+    let link = 'https://lyabmda12345.herokuapp.com/';
+    let token;
+    document.querySelector('.menu').style.maxHeight = window.screen.height
+    console.log(localStorage.getItem('token'))
+    if (localStorage.getItem('token')) {
+      token = localStorage.getItem('token');
+      chat1();
+    }
+    
+    function reques(method, args) {
+      const request = require('request');
+      request(`${link}/${method}?${args}`, function (error, response, body) {
+        console.log(body)
+        return JSON.parse(body);
+      });
+    }
+
+    function reg() {
+      name = document.querySelector("#name").value;
+      surname = document.querySelector("#surname").value;
+      description = document.querySelector("#description").value;
+      
+      res = reques('register', `token=${token}&name=${name}&surname=${surname}&description=${description}`)
+    }
+
     function second() {
       document.querySelector('.second').style.display = 'block';
       document.querySelector('.first').style.display = 'none';
     }
     function third() {
-      document.querySelector('.third').style.display = 'block';
-      document.querySelector('.second').style.display = 'none';
+      if (start()) {
+        document.querySelector('.third').style.display = 'block';
+        document.querySelector('.second').style.display = 'none';
+      } else {
+        alert('Unvalid email!');
+      }
     }
     function chat() {
+      login()
+    }
+    function chat1() {
       document.querySelector('.third').style.display = 'none';
       document.querySelector('.second').style.display = 'none';
       document.querySelector('.first').style.display = 'none';
+      document.querySelector('.chat').style.display = 'block';
+    }
+    function start() {
+      email = document.querySelector("#email").value;
+      //email = 'kreepmeister@yandex.ru'
+      reques('sendCode', `email=${email}`);
+      return true;
+    }
+    function login() {
+      email = document.querySelector("#email").value;
+      code = document.querySelector("#code").value;
+      let res = '';
+      const request = require('request');
+      request(`${link}/signIn?email=${email}&code=${code}`, function (error, response, body) {
+        console.log(body)
+        res = JSON.parse(body);
+      });
+      setTimeout(() => {
+        if (res['ok']) {
+          localStorage.setItem('token', res["token"]);
+          if (res['is_auth']) {
+            chat1()
+          } else {
+            reg()
+          }
+        } else {
+          alert('error')
+        }
+      }, 1000);
     }
   </script>
   <style>
@@ -54,7 +139,7 @@ body {
   color: white;
 }
 
-div {
+.login div {
   position: absolute;
   width: 500px;
   height: 250px;
@@ -66,7 +151,7 @@ div {
   margin-left: -250px;
 }
 
-h1 {
+.login h1 {
   font-size: 40px;
   font-weight: 100;
 }
@@ -85,13 +170,66 @@ h1 {
   padding: 10px 20px;
 }
 
-input {
+.login input {
   padding: 13.5px;
   opacity: 0.4;
   background: #8520af !important;
   color: white;
   border: none;
   font-weight: bold;
+}
+.menu {
+  width: 28%;
+  max-height: 575px;
+}
+.dialog {
+  width: 70%;
+  position: absolute;
+}
+.block {
+  padding: 20px 20px 20px 20px;
+  cursor: pointer;
+  /*border: solid #8520af 1px;*/
+}
+.block img {
+  width: 40px;
+  vertical-align: middle;
+  border-radius: 20px;
+}
+.block:hover {
+  background-color: #710c9b;
+}
+.menu, .dialog {
+  display: inline-block;
+  overflow-y: auto;
+}
+.menu::-webkit-scrollbar, .dialog::-webkit-scrollbar {
+  width: 12px;               /* ширина scrollbar */
+}
+.menu::-webkit-scrollbar-track, .dialog::-webkit-scrollbar-track {
+  background: none;        /* цвет дорожки */
+}
+.menu::-webkit-scrollbar-thumb, .dialog::-webkit-scrollbar-thumb {
+  background-color: #710c9b;    /* цвет плашки */
+  border-radius: 20px;       /* закругления плашки */
+  border: 3px solid #101420;  /* padding вокруг плашки */
+}
+.bubble {
+  margin: 10px;
+  font-family: sans-serif;
+  font-size: 18px;
+  line-height: 24px;
+  width: max-content;
+  min-width: 50px;
+  background: #fff;
+  border-radius: 40px;
+  padding: 12px;
+  text-align: center;
+  color: #000;
+}
+
+.you {
+  background-color: rgb(197, 197, 197);
 }
   </style>
 </body>

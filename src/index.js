@@ -10,7 +10,10 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: __dirname + "/icon.ico"
+    icon: __dirname + "/icon.ico",
+    webPreferences: {
+      nodeIntegration: true,
+    }
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
